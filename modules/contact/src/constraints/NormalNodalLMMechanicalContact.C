@@ -49,13 +49,13 @@ NormalNodalLMMechanicalContact::NormalNodalLMMechanicalContact(const InputParame
     _ncp_type(getParam<MooseEnum>("ncp_function_type"))
 
 {
-  _overwrite_slave_residual = false;
+  _overwrite_secondary_residual = false;
 }
 
 Real
 NormalNodalLMMechanicalContact::computeQpSlaveValue()
 {
-  return _u_slave[_qp];
+  return _u_secondary[_qp];
 }
 
 void
@@ -116,10 +116,10 @@ Real NormalNodalLMMechanicalContact::computeQpResidual(Moose::ConstraintType /*t
     {
       Real a = -pinfo->_distance * _c;
       mooseAssert(
-          _qp < _u_slave.size(),
-          "qp is greater than the size of u_slave in NormalNodalLMMechanicalContact. Check and "
+          _qp < _u_secondary.size(),
+          "qp is greater than the size of u_secondary in NormalNodalLMMechanicalContact. Check and "
           "make sure that your Lagrange multiplier variable has the same order as the mesh");
-      Real b = _u_slave[_qp];
+      Real b = _u_secondary[_qp];
 
       if (_ncp_type == "fb")
         return a + b - std::sqrt(a * a + b * b + _epsilon);
@@ -127,7 +127,7 @@ Real NormalNodalLMMechanicalContact::computeQpResidual(Moose::ConstraintType /*t
         return std::min(a, b);
     }
   }
-  return _u_slave[_qp];
+  return _u_secondary[_qp];
 }
 
 // Note that the Jacobians below are inexact. To really make them exact, the most algorithmically
@@ -142,11 +142,11 @@ Real NormalNodalLMMechanicalContact::computeQpJacobian(Moose::ConstraintJacobian
     PenetrationInfo * pinfo = found->second;
     if (pinfo != NULL)
     {
-      DualNumber<Real, Real> dual_u_slave(_u_slave[_qp]);
-      dual_u_slave.derivatives() = 1.;
+      DualNumber<Real, Real> dual_u_secondary(_u_secondary[_qp]);
+      dual_u_secondary.derivatives() = 1.;
 
       auto a = -pinfo->_distance * _c;
-      auto b = dual_u_slave;
+      auto b = dual_u_secondary;
 
       if (_ncp_type == "fb")
         return (a + b - std::sqrt(a * a + b * b + _epsilon)).derivatives();
@@ -195,7 +195,7 @@ NormalNodalLMMechanicalContact::computeQpOffDiagJacobian(Moose::ConstraintJacobi
       }
 
       auto a = gap * _c;
-      auto b = _u_slave[_qp];
+      auto b = _u_secondary[_qp];
 
       if (_ncp_type == "fb")
         return (a + b - std::sqrt(a * a + b * b + _epsilon)).derivatives();
