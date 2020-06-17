@@ -101,7 +101,7 @@ NormalNodalLMMechanicalContact::computeOffDiagJacobian(unsigned jvar)
   DenseMatrix<Number> & Ken =
       _assembly.jacobianBlockNeighbor(Moose::ElementNeighbor, _var.number(), jvar);
 
-  for (_j = 0; _j < _phi_master.size(); ++_j)
+  for (_j = 0; _j < _phi_primary.size(); ++_j)
     Ken(0, _j) += computeQpOffDiagJacobian(Moose::SlaveMaster, jvar);
 }
 
@@ -171,7 +171,7 @@ NormalNodalLMMechanicalContact::computeQpOffDiagJacobian(Moose::ConstraintJacobi
       DualNumber<Real, Real> gap(-pinfo->_distance);
 
       unsigned comp;
-      if (jvar == _master_var_num)
+      if (jvar == _primary_var_num)
         comp = 0;
       else if (jvar == _disp_y_id)
         comp = 1;
@@ -188,10 +188,10 @@ NormalNodalLMMechanicalContact::computeQpOffDiagJacobian(Moose::ConstraintJacobi
           gap.derivatives() *= 1;
           break;
         case Moose::SlaveMaster:
-          gap.derivatives() *= -_phi_master[_j][_qp];
+          gap.derivatives() *= -_phi_primary[_j][_qp];
           break;
         default:
-          mooseError("LMs do not have a master contribution.");
+          mooseError("LMs do not have a primary contribution.");
       }
 
       auto a = gap * _c;

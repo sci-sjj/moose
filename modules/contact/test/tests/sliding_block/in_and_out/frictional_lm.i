@@ -10,7 +10,7 @@
     sidesets = '3'
     new_block_id = '30'
   []
-  [master]
+  [primary]
     input = secondary
     type = LowerDBlockFromSidesetGenerator
     sidesets = '2'
@@ -144,9 +144,9 @@
   [./lm]
     type = NormalNodalLMMechanicalContact
     secondary = 3
-    master = 2
+    primary = 2
     variable = normal_lm
-    master_variable = disp_x
+    primary_variable = disp_x
     disp_y = disp_y
     ncp_function_type = min
     use_displaced_mesh = true
@@ -154,9 +154,9 @@
   [../]
   [normal_x]
     type = NormalMortarMechanicalContact
-    master_boundary = '2'
+    primary_boundary = '2'
     secondary_boundary = '3'
-    master_subdomain = '20'
+    primary_subdomain = '20'
     secondary_subdomain = '30'
     variable = normal_lm
     secondary_variable = disp_x
@@ -166,9 +166,9 @@
   []
   [normal_y]
     type = NormalMortarMechanicalContact
-    master_boundary = '2'
+    primary_boundary = '2'
     secondary_boundary = '3'
-    master_subdomain = '20'
+    primary_subdomain = '20'
     secondary_subdomain = '30'
     variable = normal_lm
     secondary_variable = disp_y
@@ -178,9 +178,9 @@
   []
   [tangential_lm]
     type = TangentialMortarLMMechanicalContact
-    master_boundary = '2'
+    primary_boundary = '2'
     secondary_boundary = '3'
-    master_subdomain = '20'
+    primary_subdomain = '20'
     secondary_subdomain = '30'
     variable = tangential_lm
     secondary_variable = disp_x
@@ -194,9 +194,9 @@
   []
   [tangential_x]
     type = TangentialMortarMechanicalContact
-    master_boundary = '2'
+    primary_boundary = '2'
     secondary_boundary = '3'
-    master_subdomain = '20'
+    primary_subdomain = '20'
     secondary_subdomain = '30'
     variable = tangential_lm
     secondary_variable = disp_x
@@ -206,9 +206,9 @@
   []
   [tangential_y]
     type = TangentialMortarMechanicalContact
-    master_boundary = '2'
+    primary_boundary = '2'
     secondary_boundary = '3'
-    master_subdomain = '20'
+    primary_subdomain = '20'
     secondary_subdomain = '30'
     variable = tangential_lm
     secondary_variable = disp_y
