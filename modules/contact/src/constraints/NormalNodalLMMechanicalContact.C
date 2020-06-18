@@ -102,7 +102,7 @@ NormalNodalLMMechanicalContact::computeOffDiagJacobian(unsigned jvar)
       _assembly.jacobianBlockNeighbor(Moose::ElementNeighbor, _var.number(), jvar);
 
   for (_j = 0; _j < _phi_primary.size(); ++_j)
-    Ken(0, _j) += computeQpOffDiagJacobian(Moose::SecondaryMaster, jvar);
+    Ken(0, _j) += computeQpOffDiagJacobian(Moose::SecondaryPrimary, jvar);
 }
 
 Real NormalNodalLMMechanicalContact::computeQpResidual(Moose::ConstraintType /*type*/)
@@ -187,7 +187,7 @@ NormalNodalLMMechanicalContact::computeQpOffDiagJacobian(Moose::ConstraintJacobi
         case Moose::SecondarySecondary:
           gap.derivatives() *= 1;
           break;
-        case Moose::SecondaryMaster:
+        case Moose::SecondaryPrimary:
           gap.derivatives() *= -_phi_primary[_j][_qp];
           break;
         default:

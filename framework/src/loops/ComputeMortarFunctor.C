@@ -215,10 +215,10 @@ ComputeMortarFunctor::operator()()
       // used in ComputeJacobianThread. I'll make sure to add/use them if these methods show up in
       // profiling
       //
-      // Add SecondaryMaster, MasterSecondary, MasterMaster
+      // Add SecondaryPrimary, PrimarySecondary, PrimaryPrimary
       _assembly.addJacobianNeighbor();
 
-      // Add LowerLower, LowerSecondary, LowerMaster, SecondaryLower, MasterLower
+      // Add LowerLower, LowerSecondary, LowerPrimary, SecondaryLower, PrimaryLower
       _assembly.addJacobianLower();
 
       num_cached++;
