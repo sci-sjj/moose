@@ -208,17 +208,17 @@ ComputeMortarFunctor::operator()()
       for (auto && mc : _mortar_constraints)
         mc->computeJacobian(_has_primary);
 
-      // Cache SlaveSlave
+      // Cache SecondarySecondary
       _assembly.cacheJacobian();
 
       // It doesn't appears that we have caching functions for these yet, or at least it's not
       // used in ComputeJacobianThread. I'll make sure to add/use them if these methods show up in
       // profiling
       //
-      // Add SlaveMaster, MasterSlave, MasterMaster
+      // Add SecondaryMaster, MasterSecondary, MasterMaster
       _assembly.addJacobianNeighbor();
 
-      // Add LowerLower, LowerSlave, LowerMaster, SlaveLower, MasterLower
+      // Add LowerLower, LowerSecondary, LowerMaster, SecondaryLower, MasterLower
       _assembly.addJacobianLower();
 
       num_cached++;

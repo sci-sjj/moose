@@ -41,7 +41,7 @@ GapHeatConductanceTest::computeQpResidual(Moose::MortarType type)
 {
   switch (type)
   {
-    case Moose::MortarType::Slave:
+    case Moose::MortarType::Secondary:
       return _lambda[_qp] * _test_secondary[_i][_qp];
 
     case Moose::MortarType::Master:

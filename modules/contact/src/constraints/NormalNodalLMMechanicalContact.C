@@ -53,7 +53,7 @@ NormalNodalLMMechanicalContact::NormalNodalLMMechanicalContact(const InputParame
 }
 
 Real
-NormalNodalLMMechanicalContact::computeQpSlaveValue()
+NormalNodalLMMechanicalContact::computeQpSecondaryValue()
 {
   return _u_secondary[_qp];
 }
@@ -65,7 +65,7 @@ NormalNodalLMMechanicalContact::computeResidual()
 
   _qp = 0;
 
-  re(0) = computeQpResidual(Moose::Slave);
+  re(0) = computeQpResidual(Moose::Secondary);
 }
 
 void
@@ -77,7 +77,7 @@ NormalNodalLMMechanicalContact::computeJacobian()
 
   _qp = 0;
 
-  _Kee(0, 0) += computeQpJacobian(Moose::SlaveSlave);
+  _Kee(0, 0) += computeQpJacobian(Moose::SecondarySecondary);
 }
 
 void
@@ -96,13 +96,13 @@ NormalNodalLMMechanicalContact::computeOffDiagJacobian(unsigned jvar)
   _qp = 0;
 
   _Kee.resize(1, 1);
-  _Kee(0, 0) += computeQpOffDiagJacobian(Moose::SlaveSlave, jvar);
+  _Kee(0, 0) += computeQpOffDiagJacobian(Moose::SecondarySecondary, jvar);
 
   DenseMatrix<Number> & Ken =
       _assembly.jacobianBlockNeighbor(Moose::ElementNeighbor, _var.number(), jvar);
 
   for (_j = 0; _j < _phi_primary.size(); ++_j)
-    Ken(0, _j) += computeQpOffDiagJacobian(Moose::SlaveMaster, jvar);
+    Ken(0, _j) += computeQpOffDiagJacobian(Moose::SecondaryMaster, jvar);
 }
 
 Real NormalNodalLMMechanicalContact::computeQpResidual(Moose::ConstraintType /*type*/)
@@ -184,10 +184,10 @@ NormalNodalLMMechanicalContact::computeQpOffDiagJacobian(Moose::ConstraintJacobi
 
       switch (type)
       {
-        case Moose::SlaveSlave:
+        case Moose::SecondarySecondary:
           gap.derivatives() *= 1;
           break;
-        case Moose::SlaveMaster:
+        case Moose::SecondaryMaster:
           gap.derivatives() *= -_phi_primary[_j][_qp];
           break;
         default:
