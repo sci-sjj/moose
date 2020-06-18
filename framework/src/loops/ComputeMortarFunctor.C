@@ -137,8 +137,11 @@ ComputeMortarFunctor::operator()()
       reinit_secondary_elem = _fe_problem.mesh().elemPtr(reinit_secondary_elem->id());
 
     // reinit the variables/residuals/jacobians on the secondary interior
-    _fe_problem.reinitElemFaceRef(
-        reinit_secondary_elem, secondary_side_id, _secondary_boundary_id, TOLERANCE, &custom_xi1_pts);
+    _fe_problem.reinitElemFaceRef(reinit_secondary_elem,
+                                  secondary_side_id,
+                                  _secondary_boundary_id,
+                                  TOLERANCE,
+                                  &custom_xi1_pts);
 
     if (_has_primary)
     {
@@ -176,11 +179,13 @@ ComputeMortarFunctor::operator()()
     _subproblem.reinitLowerDElemRef(secondary_face_elem, &custom_xi1_pts);
 
     // reinit higher-dimensional secondary face/boundary materials. Do this after we reinit lower-d
-    // variables in case we want to pull the lower-d variable values into the secondary face/boundary
-    // materials. Be careful not to execute stateful materials since conceptually
-    // they don't make sense with mortar (they're not interpolary)
-    _fe_problem.reinitMaterialsFace(
-        secondary_ip->subdomain_id(), /*tid=*/0, /*swap_stateful=*/false, /*execute_stateful=*/false);
+    // variables in case we want to pull the lower-d variable values into the secondary
+    // face/boundary materials. Be careful not to execute stateful materials since conceptually they
+    // don't make sense with mortar (they're not interpolary)
+    _fe_problem.reinitMaterialsFace(secondary_ip->subdomain_id(),
+                                    /*tid=*/0,
+                                    /*swap_stateful=*/false,
+                                    /*execute_stateful=*/false);
     _fe_problem.reinitMaterialsBoundary(
         _secondary_boundary_id, /*tid=*/0, /*swap_stateful=*/false, /*execute_stateful=*/false);
 
