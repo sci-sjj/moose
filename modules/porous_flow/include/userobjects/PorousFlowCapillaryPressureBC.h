@@ -37,5 +37,5 @@ protected:
   /// Brooks-Corey exponent lambda
   const Real _lambda;
   /// Threshold entry pressure
-  const Real _pe;
+  const VariableValue & _pe;
 };
